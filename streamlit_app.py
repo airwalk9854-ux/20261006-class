@@ -1,151 +1,143 @@
 import streamlit as st
-import pandas as pd
-import math
-from pathlib import Path
 
-# Set the title and favicon that appear in the Browser's tab bar.
 st.set_page_config(
-    page_title='GDP dashboard',
-    page_icon=':earth_americas:', # This is an emoji shortcode. Could be a URL too.
+    page_title="심하늘 교사 소개",
+    page_icon="🎓",
+    layout="wide",
 )
 
-# -----------------------------------------------------------------------------
-# Declare some useful functions.
-
-@st.cache_data
-def get_gdp_data():
-    """Grab GDP data from a CSV file.
-
-    This uses caching to avoid having to read the file every time. If we were
-    reading from an HTTP endpoint instead of a file, it's a good idea to set
-    a maximum age to the cache with the TTL argument: @st.cache_data(ttl='1d')
+st.markdown(
     """
+    <style>
+    .main {
+        background: linear-gradient(135deg, #f5f7ff 0%, #eef8ff 100%);
+    }
+    .hero-box {
+        background: linear-gradient(135deg, #1f4e79 0%, #2d6aa0 100%);
+        border-radius: 20px;
+        padding: 2rem 2rem;
+        color: white;
+        box-shadow: 0 10px 30px rgba(31, 78, 121, 0.18);
+    }
+    .section-card {
+        background: rgba(255,255,255,0.96);
+        border: 1px solid #dfeaf7;
+        border-radius: 16px;
+        padding: 1.2rem 1.4rem;
+        box-shadow: 0 6px 18px rgba(17, 33, 61, 0.05);
+        color: #173a5e;
+    }
+    .section-card p, .section-card li, .section-card div {
+        color: #173a5e;
+    }
+    .chip {
+        display: inline-block;
+        background: rgba(255,255,255,0.15);
+        border: 1px solid rgba(255,255,255,0.25);
+        border-radius: 999px;
+        padding: 0.35rem 0.8rem;
+        margin: 0.2rem 0.5rem 0.2rem 0;
+        font-size: 0.82rem;
+        font-weight: 600;
+    }
+    .info-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #173a5e;
+        margin-bottom: 0.6rem;
+    }
+    .custom-list li {
+        margin-bottom: 0.5rem;
+        line-height: 1.7;
+    }
+    </style>
+    """
+    , unsafe_allow_html=True
+)
 
-    # Instead of a CSV on disk, you could read from an HTTP endpoint here too.
-    DATA_FILENAME = Path(__file__).parent/'data/gdp_data.csv'
-    raw_gdp_df = pd.read_csv(DATA_FILENAME)
+st.markdown(
+    """
+    <div class="hero-box">
+        <h1 style="margin:0; font-size:2.4rem;">심하늘</h1>
+        <div style="margin-top:0.8rem;">
+            <span class="chip">화원중학교 역사 교사</span>
+            <span class="chip">숙명여대 교육대학원 AI융합교육 전공</span>
+            <span class="chip">AI·에듀테크 활용 수업 전문성 강화</span>
+        </div>
+        <p style="margin-top:1rem; margin-bottom:0.6rem; font-size:1.02rem; color:#eaf4ff;">
+            학생의 질문과 탐구를 중심으로 수업을 설계하고, AI와 에듀테크를 활용해 학습의 의미를 확장하는 교사로 성장하고 있습니다.
+            수업의 설계와 평가를 함께 고민하며, 학생이 수업 속에서 주도적으로 참여하고 성취감을 느끼도록 돕는 것을 목표로 합니다.
+        </p>
+        <p style="margin-top:0.8rem; margin-bottom:0; font-size:0.96rem; color:#dfeeff;">
+            연락처: airwalk98@senedu.kr
+        </p>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 
-    MIN_YEAR = 1960
-    MAX_YEAR = 2022
+st.markdown("<br>", unsafe_allow_html=True)
 
-    # The data above has columns like:
-    # - Country Name
-    # - Country Code
-    # - [Stuff I don't care about]
-    # - GDP for 1960
-    # - GDP for 1961
-    # - GDP for 1962
-    # - ...
-    # - GDP for 2022
-    #
-    # ...but I want this instead:
-    # - Country Name
-    # - Country Code
-    # - Year
-    # - GDP
-    #
-    # So let's pivot all those year-columns into two: Year and GDP
-    gdp_df = raw_gdp_df.melt(
-        ['Country Code'],
-        [str(x) for x in range(MIN_YEAR, MAX_YEAR + 1)],
-        'Year',
-        'GDP',
+basic_tab, career_tab, project_tab = st.tabs(["기본", "경력", "사업 및 연수"])
+
+with basic_tab:
+    st.markdown(
+        """
+        <div class="section-card">
+            <div class="info-title">기본 정보</div>
+            <ul class="custom-list" style="margin:0; padding-left:1.2rem;">
+                <li>학교: 화원중학교</li>
+                <li>과목: 역사</li>
+                <li>대학원: 숙명여대 교육대학원 AI융합교육 전공</li>
+                <li>관심분야: AI 및 에듀테크를 활용한 학생 중심 수업을 진행하며 교수학습 설계 및 평가에서 전문성을 키워가는 9년차 교사</li>
+            </ul>
+        </div>
+        """,
+        unsafe_allow_html=True,
     )
 
-    # Convert years from string to integers
-    gdp_df['Year'] = pd.to_numeric(gdp_df['Year'])
+with career_tab:
+    st.markdown(
+        """
+        <div class="section-card">
+            <div class="info-title">경력</div>
+            <ul class="custom-list" style="margin:0; padding-left:1.2rem;">
+                <li>2020~2026년 수업평가나눔 교사단 활동</li>
+                <li>2024, 2026 AI · 에듀테크 교사단</li>
+                <li>2024 강서양천 학교로 찾아가는 디지털 역량 강화 연수 강사 활동</li>
+                <li>2024 교실혁명 선도교사단</li>
+                <li>AIEDAP 마스터교원</li>
+                <li>2024 서울시교육청 디지털 기반 수업·평가 전문가</li>
+                <li>2024 성취평가 선도교원</li>
+                <li>2025, 2026 서울시교육청 학생평가지원단</li>
+                <li>2025 서울시교육청 디지털 기반 수업·평가 전문가 강사</li>
+                <li>2026 컨설팅장학 지원단</li>
+                <li>2026 인공지능 활용 선도교사 강사 활동</li>
+                <li>2026 학생 질문 중심 수업평가 선도교원</li>
+            </ul>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
-    return gdp_df
+with project_tab:
+    st.markdown(
+        """
+        <div class="section-card">
+            <div class="info-title">사업 및 연수</div>
+            <ul class="custom-list" style="margin:0; padding-left:1.2rem;">
+                <li>2024, 2025 생각을 쓰는 교실 실천팀</li>
+                <li>2025 AI활용 서논술형 평가 실천학교</li>
+                <li>2025 논술형 평가 전문가 아카데미</li>
+                <li>2025 서울형 독서토론 기반 프로젝트 수업</li>
+                <li>2025 중등 AI.디지털 글로벌 역량 강화 직무연수</li>
+                <li>2026 개념탐독 실천교실</li>
+                <li>2026 학교통일교육 프로젝트 수업</li>
+            </ul>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
-gdp_df = get_gdp_data()
-
-# -----------------------------------------------------------------------------
-# Draw the actual page
-
-# Set the title that appears at the top of the page.
-'''
-# :earth_americas: GDP dashboard
-
-Browse GDP data from the [World Bank Open Data](https://data.worldbank.org/) website. As you'll
-notice, the data only goes to 2022 right now, and datapoints for certain years are often missing.
-But it's otherwise a great (and did I mention _free_?) source of data.
-'''
-
-# Add some spacing
-''
-''
-
-min_value = gdp_df['Year'].min()
-max_value = gdp_df['Year'].max()
-
-from_year, to_year = st.slider(
-    'Which years are you interested in?',
-    min_value=min_value,
-    max_value=max_value,
-    value=[min_value, max_value])
-
-countries = gdp_df['Country Code'].unique()
-
-if not len(countries):
-    st.warning("Select at least one country")
-
-selected_countries = st.multiselect(
-    'Which countries would you like to view?',
-    countries,
-    ['DEU', 'FRA', 'GBR', 'BRA', 'MEX', 'JPN'])
-
-''
-''
-''
-
-# Filter the data
-filtered_gdp_df = gdp_df[
-    (gdp_df['Country Code'].isin(selected_countries))
-    & (gdp_df['Year'] <= to_year)
-    & (from_year <= gdp_df['Year'])
-]
-
-st.header('GDP over time', divider='gray')
-
-''
-
-st.line_chart(
-    filtered_gdp_df,
-    x='Year',
-    y='GDP',
-    color='Country Code',
-)
-
-''
-''
-
-
-first_year = gdp_df[gdp_df['Year'] == from_year]
-last_year = gdp_df[gdp_df['Year'] == to_year]
-
-st.header(f'GDP in {to_year}', divider='gray')
-
-''
-
-cols = st.columns(4)
-
-for i, country in enumerate(selected_countries):
-    col = cols[i % len(cols)]
-
-    with col:
-        first_gdp = first_year[first_year['Country Code'] == country]['GDP'].iat[0] / 1000000000
-        last_gdp = last_year[last_year['Country Code'] == country]['GDP'].iat[0] / 1000000000
-
-        if math.isnan(first_gdp):
-            growth = 'n/a'
-            delta_color = 'off'
-        else:
-            growth = f'{last_gdp / first_gdp:,.2f}x'
-            delta_color = 'normal'
-
-        st.metric(
-            label=f'{country} GDP',
-            value=f'{last_gdp:,.0f}B',
-            delta=growth,
-            delta_color=delta_color
-        )
+st.markdown("<br>", unsafe_allow_html=True)
+st.caption("교육 현장에 AI와 디지털 역량을 자연스럽게 연결하며, 학생이 성장하는 수업을 설계하는 교사입니다.")
